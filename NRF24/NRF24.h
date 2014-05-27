@@ -646,6 +646,11 @@ public:
     /// \return true if a valid message was copied to buf
     boolean        recv(uint8_t* buf, uint8_t* len);
 
+
+    // Additions for sniffing capabilities.
+    boolean setAddressWidth(uint8_t width);
+    boolean powerUpSNIFF();
+
 protected:
 
 private:

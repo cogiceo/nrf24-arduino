@@ -8,9 +8,16 @@
 
 NRF24::NRF24(uint8_t chipEnablePin, uint8_t chipSelectPin)
 {
-    _configuration = NRF24_EN_CRC; // Default: 1 byte CRC enabled
+    _configuration = 0; //Default: CRC disabled
     _chipEnablePin = chipEnablePin;
     _chipSelectPin = chipSelectPin;
+}
+
+boolean NRF24::setAddressWidth(uint8_t width){
+	// Officially valid values are 1,2,3. I accept 0 however
+	//because that hack makes sniffing easier (thx TravisGoodspeed)
+	if (width>3) width=3;
+	spiWriteRegister(NRF24_REG_03_SETUP_AW, width);
 }
 
 boolean NRF24::init()
@@ -204,6 +211,30 @@ boolean NRF24::powerDown()
 boolean NRF24::powerUpRx()
 {
     spiWriteRegister(NRF24_REG_00_CONFIG, _configuration | NRF24_PWR_UP | NRF24_PRIM_RX);
+    digitalWrite(_chipEnablePin, HIGH);
+    return true;
+}
+
+boolean NRF24::powerUpSNIFF()
+{
+    spiWriteRegister(NRF24_REG_00_CONFIG, 0); // #Stop nRF
+    spiWriteRegister(NRF24_REG_01_EN_AA, 0); // #Disable Shockburst
+    spiWriteRegister(NRF24_REG_02_EN_RXADDR, 0x01); // #Set RX Pipe 0
+
+    // #Disable shockburst.
+    spiWriteRegister(NRF24_REG_1C_DYNPD, 0x00);
+    spiWriteRegister(NRF24_REG_1D_FEATURE, 0x00);
+
+    spiWriteRegister(NRF24_REG_03_SETUP_AW, 0x00); //# SETUP_AW for shortest
+    spiWriteRegister(NRF24_REG_11_RX_PW_P0, 32);   // Set payload to 32 bytes
+    spiWriteRegister(NRF24_REG_12_RX_PW_P1, 32);
+
+    //Only one of the two following is mandatory; I leave these here as a reminder to myself :)
+    spiBurstWriteRegister(NRF24_REG_0A_RX_ADDR_P0, (uint8_t*)"\x55\x00", 2); //set address to \x00\x55 ...endianness
+    spiBurstWriteRegister(NRF24_REG_0A_RX_ADDR_P0, (uint8_t*)"\xAA\x00", 2); //set address to \x00\xAA ...endianness!
+
+    spiWriteRegister(NRF24_REG_00_CONFIG, 0x70|0x03); // #prime radio.
+	
     digitalWrite(_chipEnablePin, HIGH);
     return true;
 }
