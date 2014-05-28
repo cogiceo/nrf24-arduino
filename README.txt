@@ -44,3 +44,13 @@ CD051C03008000000000000000000000005A1DDA155FF0B501370AAB059E94AB
 CD051C03008000000000000000000000005A1DFA2F954E65AFA87F747E59584C
 CD051C03008000000000000000000000005A1DBD55A87F998BF056AAD11554B2
 ...
+
+
+===============
+=== LICENSE ===
+===============
+Folder NRF24 : fork of a library by Mike McCauley under the GPLV2. Our changes are also published under the GPLV2.
+
+nRF24SNIFF_pycontrolled.ino : This arduino sketched is published under the GPLV2.
+
+sniffer_pycontrolled : the pyserial library is published by Chris Liechti under a bsd-like license. Our script ('nrf24_SNIFF_pycontrolled_NG.py') is published under the GPLV2.

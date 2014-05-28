@@ -1,3 +1,6 @@
+//	Licensed under the GPL V2
+//	Alain <ozwald> Schneider - COGICEO 2014
+
 // Python-serial controlled sniffer
 // Commands are :
 // 10 : return 1 if nrf24 initialisation was OK, 0 otherwise

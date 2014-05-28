@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#	Licensed under the GPL V2, go google it yourself :)
+#	Licensed under the GPL V2
 #	Alain <ozwald> Schneider - COGICEO 2014
 
 import serial
